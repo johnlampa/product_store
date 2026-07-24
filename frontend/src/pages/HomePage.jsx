@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useProductStore } from '../store/useProductStore'
-import { PackageIcon, PlusCircleIcon, RefreshCwIcon } from 'lucide-react'
+import { PackageIcon, PlusCircleIcon, RefreshCwIcon, StoreIcon } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
 import AddProductModal from '../components/AddProductModal'
 
@@ -14,16 +15,29 @@ function HomePage() {
   return (
     <>
       <div className='mx-auto px-4 py-8 max-w-6xl'>
-        <div className='flex justify-between items-center mb-8'>
-          <button 
-            className='btn btn-primary' 
-            onClick={() => document.getElementById('add_product_modal').showModal()}>
-            <PlusCircleIcon className='size-5 mr-2'></PlusCircleIcon>
-            Add Product
-          </button>
-          <button className='btn btn-ghost btn-circle' onClick={fetchProducts}>
-            <RefreshCwIcon className='size-5'></RefreshCwIcon>
-          </button>
+        <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8'>
+          <div>
+            <p className="text-sm uppercase tracking-widest text-secondary mb-1">Postgres + Express</p>
+            <h1 className="text-3xl font-bold">Local Inventory</h1>
+            <p className="text-base-content/60 mt-1">
+              Your original CRUD catalog — separate from Shopify checkout
+            </p>
+          </div>
+          <div className='flex items-center gap-2'>
+            <Link to="/shop" className="btn btn-secondary btn-outline">
+              <StoreIcon className="size-4 mr-2" />
+              Open Shopify shop
+            </Link>
+            <button 
+              className='btn btn-primary' 
+              onClick={() => document.getElementById('add_product_modal').showModal()}>
+              <PlusCircleIcon className='size-5 mr-2'></PlusCircleIcon>
+              Add Product
+            </button>
+            <button className='btn btn-ghost btn-circle' onClick={fetchProducts}>
+              <RefreshCwIcon className='size-5'></RefreshCwIcon>
+            </button>
+          </div>
         </div>
 
         <AddProductModal></AddProductModal>
