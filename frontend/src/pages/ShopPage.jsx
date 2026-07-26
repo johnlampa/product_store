@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import {
   PackageIcon,
   RefreshCwIcon,
@@ -29,17 +28,13 @@ function ShopPage() {
     <div className="mx-auto px-4 py-8 max-w-6xl">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
         <div>
-          <p className="text-sm uppercase tracking-widest text-secondary mb-1">Headless commerce</p>
-          <h1 className="text-3xl font-bold">Shopify Storefront</h1>
+          <h1 className="text-3xl font-bold">Shop</h1>
           <p className="text-base-content/60 mt-1">
-            Products and checkout powered by Shopify Storefront API
+            Browse products and checkout securely with Shopify
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <Link to="/" className="btn btn-ghost btn-sm">
-            Local inventory
-          </Link>
           {status?.adminConfigured && (
             <button
               className="btn btn-outline btn-sm"
@@ -79,7 +74,7 @@ function ShopPage() {
             <PackageIcon className="size-12" />
           </div>
           <div className="text-center space-y-2">
-            <h3 className="text-2xl font-semibold">No Shopify products yet</h3>
+            <h3 className="text-2xl font-semibold">No products yet</h3>
             <p className="text-base-content/60 max-w-sm">
               Add products in your Shopify Admin, then refresh this page.
             </p>
