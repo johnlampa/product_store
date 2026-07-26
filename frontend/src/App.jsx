@@ -1,7 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
-import HomePage from './pages/HomePage';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
-import ProductPage from './pages/ProductPage';
 import ShopPage from './pages/ShopPage';
 import ShopProductPage from './pages/ShopProductPage';
 import CartDrawer from './components/CartDrawer';
@@ -18,9 +16,8 @@ function App() {
     >
       <NavBar />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/product/:id" element={<ProductPage />} />
-        <Route path="/shop" element={<ShopPage />} />
+        <Route path="/" element={<ShopPage />} />
+        <Route path="/shop" element={<Navigate to="/" replace />} />
         <Route path="/shop/:handle" element={<ShopProductPage />} />
       </Routes>
 

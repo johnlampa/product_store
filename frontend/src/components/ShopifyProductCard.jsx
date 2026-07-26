@@ -31,7 +31,6 @@ function ShopifyProductCard({ product }) {
             <ShoppingBagIcon className="size-12" />
           </div>
         )}
-        <div className="badge badge-secondary absolute top-3 left-3">Shopify</div>
       </figure>
 
       <div className="card-body">

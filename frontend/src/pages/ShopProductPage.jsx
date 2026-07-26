@@ -53,7 +53,7 @@ function ShopProductPage() {
   if (error || !currentProduct) {
     return (
       <div className="container mx-auto px-4 py-8 max-w-4xl space-y-4">
-        <Link to="/shop" className="btn btn-ghost">
+        <Link to="/" className="btn btn-ghost">
           <ArrowLeftIcon className="size-4 mr-2" />
           Back to shop
         </Link>
@@ -64,7 +64,7 @@ function ShopProductPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
-      <Link to="/shop" className="btn btn-ghost mb-8">
+      <Link to="/" className="btn btn-ghost mb-8">
         <ArrowLeftIcon className="size-4 mr-2" />
         Back to shop
       </Link>

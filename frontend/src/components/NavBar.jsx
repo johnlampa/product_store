@@ -1,17 +1,11 @@
 import { useEffect } from 'react';
-import { Link, useResolvedPath } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ShoppingBagIcon, ShoppingCartIcon } from 'lucide-react';
 import ThemeSelector from './ThemeSelector';
 import { useShopifyStore } from '../store/useShopifyStore';
-import { useProductStore } from '../store/useProductStore';
 
 function NavBar() {
-  const { pathname } = useResolvedPath();
-  const isHomePage = pathname === '/';
-  const isShop = pathname.startsWith('/shop');
-
-  const { cart, setCartOpen, loadCart, fetchStatus, status } = useShopifyStore();
-  const { products } = useProductStore();
+  const { cart, setCartOpen, loadCart, fetchStatus } = useShopifyStore();
 
   useEffect(() => {
     fetchStatus();
@@ -39,47 +33,21 @@ function NavBar() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-4">
-            <Link
-              to="/"
-              className={`btn btn-ghost btn-sm ${isHomePage ? 'btn-active' : ''}`}
-            >
-              Inventory
-            </Link>
-            <Link
-              to="/shop"
-              className={`btn btn-ghost btn-sm ${isShop ? 'btn-active' : ''}`}
-            >
-              Shopify
-            </Link>
-
             <ThemeSelector />
 
-            {isHomePage && (
-              <div className="indicator" title="Local inventory count">
-                <div className="p-2 rounded-full hover:bg-base-200 transition-colors">
-                  <ShoppingBagIcon className="size-5" />
-                  <span className="badge badge-sm badge-primary indicator-item">
-                    {products.length}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            {(isShop || status?.storefrontConfigured) && (
-              <button
-                type="button"
-                className="indicator btn btn-ghost btn-circle"
-                onClick={() => setCartOpen(true)}
-                title="Shopify cart"
-              >
-                <ShoppingBagIcon className="size-5" />
-                {cartCount > 0 && (
-                  <span className="badge badge-sm badge-secondary indicator-item">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            )}
+            <button
+              type="button"
+              className="indicator btn btn-ghost btn-circle"
+              onClick={() => setCartOpen(true)}
+              title="Cart"
+            >
+              <ShoppingBagIcon className="size-5" />
+              {cartCount > 0 && (
+                <span className="badge badge-sm badge-secondary indicator-item">
+                  {cartCount}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       </div>
