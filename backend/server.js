@@ -41,8 +41,11 @@ app.post(
 app.use(express.json());
 
 app.use(async (req, res, next) => {
-  // Webhooks are verified via HMAC; skip Arcjet bot checks for that path
-  if (req.path.startsWith('/api/shopify/webhooks')) {
+  // Webhooks are HMAC-verified; status is a public health check for credential setup
+  if (
+    req.path.startsWith('/api/shopify/webhooks') ||
+    req.path === '/api/shopify/status'
+  ) {
     return next();
   }
 
