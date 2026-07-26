@@ -3,7 +3,9 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import productRoutes from './routes/productRoutes.js';
 import shopifyRoutes from './routes/shopifyRoutes.js';
@@ -17,7 +19,10 @@ dotenv.config();
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-const __dirname = path.resolve();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+const frontendIndex = path.join(frontendDist, 'index.html');
 
 app.use(cors());
 app.use(
@@ -41,8 +46,9 @@ app.post(
 app.use(express.json());
 
 app.use(async (req, res, next) => {
-  // Webhooks are HMAC-verified; status is a public health check for credential setup
+  // Only protect API routes; static frontend assets should pass through
   if (
+    !req.path.startsWith('/api') ||
     req.path.startsWith('/api/shopify/webhooks') ||
     req.path === '/api/shopify/status'
   ) {
@@ -84,12 +90,13 @@ app.use(async (req, res, next) => {
 app.use('/api/products', productRoutes);
 app.use('/api/shopify', shopifyRoutes);
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '/frontend/dist')));
+// Serve the Vite build whenever it exists (Render may not set NODE_ENV=production)
+if (fs.existsSync(frontendIndex)) {
+  app.use(express.static(frontendDist));
 
   app.use((req, res, next) => {
     if (req.method === 'GET' && !req.path.startsWith('/api')) {
-      res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'));
+      res.sendFile(frontendIndex);
       return;
     }
     next();
