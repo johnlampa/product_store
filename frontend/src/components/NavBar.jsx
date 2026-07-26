@@ -35,19 +35,22 @@ function NavBar() {
           <div className="flex items-center gap-2 sm:gap-4">
             <ThemeSelector />
 
-            <button
-              type="button"
-              className="indicator btn btn-ghost btn-circle"
-              onClick={() => setCartOpen(true)}
-              title="Cart"
-            >
-              <ShoppingBagIcon className="size-5" />
+            <div className="indicator">
               {cartCount > 0 && (
                 <span className="badge badge-sm badge-secondary indicator-item">
                   {cartCount}
                 </span>
               )}
-            </button>
+              <button
+                type="button"
+                className="btn btn-ghost btn-circle"
+                onClick={() => setCartOpen(true)}
+                title="Cart"
+                aria-label="Open cart"
+              >
+                <ShoppingBagIcon className="size-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

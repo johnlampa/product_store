@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import {
   PackageIcon,
   RefreshCwIcon,
-  CloudDownloadIcon,
   ShoppingBagIcon,
 } from 'lucide-react';
 import { useShopifyStore } from '../store/useShopifyStore';
@@ -16,7 +15,6 @@ function ShopPage() {
     status,
     fetchProducts,
     fetchStatus,
-    syncProducts,
   } = useShopifyStore();
 
   useEffect(() => {
@@ -35,18 +33,11 @@ function ShopPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          {status?.adminConfigured && (
-            <button
-              className="btn btn-outline btn-sm"
-              onClick={syncProducts}
-              disabled={loading}
-              title="Pull products from Shopify Admin into Postgres"
-            >
-              <CloudDownloadIcon className="size-4 mr-1" />
-              Sync to DB
-            </button>
-          )}
-          <button className="btn btn-ghost btn-circle" onClick={fetchProducts}>
+          <button
+            className="btn btn-ghost btn-circle"
+            onClick={fetchProducts}
+            title="Refresh products"
+          >
             <RefreshCwIcon className="size-5" />
           </button>
         </div>
