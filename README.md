@@ -1,4 +1,4 @@
-# JKL Shop — Product Store
+# JKL Shop
 
 A full-stack e-commerce demo built with the **PERN** stack (PostgreSQL, Express, React, Node), plus a **headless Shopify** storefront for cart and checkout.
 
@@ -8,12 +8,12 @@ A full-stack e-commerce demo built with the **PERN** stack (PostgreSQL, Express,
 
 ## Features
 
-- **Local inventory CRUD** — create, read, update, and delete products stored in Neon Postgres
-- **Headless Shopify shop** — live catalog via Storefront API, cart drawer, and Shopify-hosted checkout
-- **Admin product sync** — pull Shopify products into Postgres with the Admin API
-- **Webhooks** — HMAC-verified product events written to Postgres
-- **Security** — Arcjet rate limiting, bot detection, and Helmet headers
-- **Theming** — DaisyUI theme switcher with persistent preference
+- **Local inventory CRUD**: create, read, update, and delete products stored in Neon Postgres
+- **Headless Shopify shop**: live catalog via Storefront API, cart drawer, and Shopify-hosted checkout
+- **Admin product sync**: pull Shopify products into Postgres with the Admin API
+- **Webhooks**: HMAC-verified product events written to Postgres
+- **Security**: Arcjet rate limiting, bot detection, and Helmet headers
+- **Theming**: DaisyUI theme switcher with persistent preference
 
 ---
 
@@ -56,7 +56,7 @@ product_store/
 
 | Route | Description |
 |--------|-------------|
-| `/` | Local inventory — Postgres-backed product CRUD |
+| `/` | Local inventory, Postgres-backed product CRUD |
 | `/product/:id` | Edit / delete a local product |
 | `/shop` | Shopify storefront catalog |
 | `/shop/:handle` | Shopify product detail + add to cart |
@@ -71,7 +71,7 @@ product_store/
 - Node.js 18+
 - A [Neon](https://neon.tech) Postgres database
 - An [Arcjet](https://arcjet.com) API key
-- (Optional) A Shopify development store — see `SHOPIFY.md`
+- (Optional) A Shopify development store, see `SHOPIFY.md`
 
 ### 1. Clone the repo
 
@@ -106,7 +106,7 @@ PGDATABASE=
 
 ARCJET_KEY=
 
-# Optional — Shopify headless commerce
+# Optional: Shopify headless commerce
 SHOPIFY_ENABLED=true
 SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
 SHOPIFY_API_VERSION=2025-01
@@ -115,15 +115,15 @@ SHOPIFY_ADMIN_ACCESS_TOKEN=
 SHOPIFY_WEBHOOK_SECRET=
 ```
 
-For Shopify scopes, tokens, sync, and webhooks, follow **[SHOPIFY.md](./SHOPIFY.md)**.
+For Shopify scopes, tokens, sync, and webhooks, see [SHOPIFY.md](./SHOPIFY.md).
 
 ### 4. Run locally
 
 ```bash
-# Terminal 1 — API (http://localhost:3000)
+# Terminal 1: API (http://localhost:3000)
 npm run dev
 
-# Terminal 2 — Frontend (http://localhost:5173)
+# Terminal 2: Frontend (http://localhost:5173)
 cd frontend && npm run dev
 ```
 
@@ -162,7 +162,7 @@ NODE_ENV=production npm start
 | `POST` | `/api/shopify/cart/lines` | Add line item |
 | `PUT` | `/api/shopify/cart/lines` | Update quantity |
 | `DELETE` | `/api/shopify/cart/lines` | Remove line item |
-| `POST` | `/api/shopify/sync` | Sync Admin products → Postgres |
+| `POST` | `/api/shopify/sync` | Sync Admin products into Postgres |
 | `POST` | `/api/shopify/webhooks` | Shopify webhook receiver |
 
 ---

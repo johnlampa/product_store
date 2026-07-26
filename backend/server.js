@@ -27,7 +27,7 @@ app.use(
 );
 app.use(morgan('dev'));
 
-// Shopify webhooks need the raw body for HMAC verification — mount before JSON parser
+// Shopify webhooks need the raw body for HMAC verification, so mount before the JSON parser
 app.post(
   '/api/shopify/webhooks',
   express.raw({ type: 'application/json' }),

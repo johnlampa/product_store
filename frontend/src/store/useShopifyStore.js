@@ -187,7 +187,7 @@ export const useShopifyStore = create((set, get) => ({
       return response.data.data;
     } catch (error) {
       console.error('Error syncing products:', error);
-      toast.error(error.response?.data?.message || 'Sync failed — need Admin API token');
+      toast.error(error.response?.data?.message || 'Sync failed. Admin API token required.');
       return null;
     } finally {
       set({ loading: false });

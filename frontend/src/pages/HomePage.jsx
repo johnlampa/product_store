@@ -20,7 +20,7 @@ function HomePage() {
             <p className="text-sm uppercase tracking-widest text-secondary mb-1">Postgres + Express</p>
             <h1 className="text-3xl font-bold">Local Inventory</h1>
             <p className="text-base-content/60 mt-1">
-              Your original CRUD catalog — separate from Shopify checkout
+              CRUD catalog stored in Postgres, separate from Shopify checkout
             </p>
           </div>
           <div className='flex items-center gap-2'>

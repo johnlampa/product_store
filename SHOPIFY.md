@@ -1,8 +1,8 @@
 # Shopify Integration
 
-Headless Shopify on top of this PERN app (Postgres, Express, React, Node).
+Notes on the headless Shopify layer that sits on top of the PERN app.
 
-## What was built
+## Endpoints
 
 | Piece | Path / endpoint | Purpose |
 |--------|------------------|---------|
@@ -11,23 +11,23 @@ Headless Shopify on top of this PERN app (Postgres, Express, React, Node).
 | Cart CRUD | `/api/shopify/cart*` | Cart create / add / update / remove |
 | Checkout | Cart `checkoutUrl` | Redirects to Shopify-hosted checkout |
 | Admin sync | `POST /api/shopify/sync` | Pulls products into Postgres `shopify_products` |
-| Webhooks | `POST /api/shopify/webhooks` | HMAC-verified product updates → Postgres |
+| Webhooks | `POST /api/shopify/webhooks` | HMAC-verified product updates into Postgres |
 | Status | `GET /api/shopify/status` | Shows which credentials are configured |
 | Shop UI | `/shop`, `/shop/:handle` | React storefront + cart drawer |
-| Local inventory | `/` | Original Postgres CRUD (unchanged) |
+| Local inventory | `/` | Postgres CRUD |
 
-## What you must do (I cannot do these)
+## Shopify account setup
 
-1. **Create a Shopify Partner account** — [partners.shopify.com](https://partners.shopify.com)
-2. **Create a development store** (Partner Dashboard → Stores → Add store)
-3. **Create a custom app** on that store (Settings → Apps and sales channels → Develop apps)
-4. **Generate API credentials** and put them in `.env` (see below)
-5. **Add products** in Shopify Admin so `/shop` has something to show
-6. **Expose your server publicly** (e.g. ngrok) to receive webhooks locally
-7. **Register webhooks** in the custom app pointing at your public URL
-8. **Deploy** with real env vars on your host (Render, Railway, etc.)
+Before any of this runs you need a store and API credentials:
 
-I cannot log into Shopify as you, create stores/apps, or obtain live tokens.
+1. Create a Shopify Partner account at [partners.shopify.com](https://partners.shopify.com)
+2. Create a development store (Partner Dashboard, Stores, Add store)
+3. Create a custom app on that store (Settings, Apps and sales channels, Develop apps)
+4. Generate API credentials and put them in `.env` (see below)
+5. Add products in Shopify Admin so `/shop` has something to show
+6. Expose the server publicly (e.g. ngrok) to receive webhooks locally
+7. Register webhooks in the custom app pointing at the public URL
+8. Deploy with real env vars on the host (Render, Railway, etc.)
 
 ---
 
@@ -39,7 +39,7 @@ I cannot log into Shopify as you, create stores/apps, or obtain live tokens.
 cp .env.example .env
 ```
 
-Fill in your existing Postgres + Arcjet values, then Shopify:
+Fill in the Postgres + Arcjet values, then Shopify:
 
 ```env
 SHOPIFY_ENABLED=true
@@ -52,7 +52,7 @@ SHOPIFY_WEBHOOK_SECRET=your_webhook_secret
 
 ### 2. Custom app scopes
 
-In Shopify Admin → **Develop apps** → your app → **Configuration**:
+In Shopify Admin, **Develop apps**, your app, **Configuration**:
 
 **Storefront API** (enable Storefront API access):
 - `unauthenticated_read_product_listings`
@@ -62,19 +62,19 @@ In Shopify Admin → **Develop apps** → your app → **Configuration**:
 **Admin API** (for sync + webhooks):
 - `read_products`
 - `write_products` (optional)
-- `read_orders` (optional, if you later handle order webhooks)
+- `read_orders` (optional, if order webhooks get added later)
 
 Install the app on the store, then copy:
-- **Storefront API** public access token → `SHOPIFY_STOREFRONT_ACCESS_TOKEN`
-- **Admin API** access token → `SHOPIFY_ADMIN_ACCESS_TOKEN`
+- **Storefront API** public access token into `SHOPIFY_STOREFRONT_ACCESS_TOKEN`
+- **Admin API** access token into `SHOPIFY_ADMIN_ACCESS_TOKEN`
 
 ### 3. Run the app
 
 ```bash
-# terminal 1 — API
+# terminal 1, API
 npm run dev
 
-# terminal 2 — React
+# terminal 2, React
 cd frontend && npm run dev
 ```
 
@@ -82,37 +82,37 @@ Open:
 - Local inventory: `http://localhost:5173/`
 - Shopify shop: `http://localhost:5173/shop`
 
-### 4. Webhooks (optional but portfolio-strong)
+### 4. Webhooks (optional)
 
 1. Start a tunnel, e.g. `ngrok http 3000`
-2. In the custom app → **Webhooks**, subscribe to:
+2. In the custom app, under **Webhooks**, subscribe to:
    - `products/create`
    - `products/update`
    - `products/delete`
 3. URL: `https://YOUR-NGROK-URL/api/shopify/webhooks`
-4. Copy the signing secret → `SHOPIFY_WEBHOOK_SECRET`
+4. Copy the signing secret into `SHOPIFY_WEBHOOK_SECRET`
 
 Events are stored in `shopify_webhook_events` and product rows update in `shopify_products`.
 
 ### 5. Sync button
 
-On `/shop`, if Admin API is configured, **Sync to DB** calls `POST /api/shopify/sync` and caches products in Postgres. Good demo for “Shopify ↔ Postgres”.
+On `/shop`, if the Admin API is configured, **Sync to DB** calls `POST /api/shopify/sync` and caches products in Postgres.
 
 ---
 
-## Portfolio talking points
+## Design notes
 
-- BFF pattern: React never talks to Shopify directly; Express proxies Storefront GraphQL
-- Cart persisted via `localStorage` cart id + Shopify Cart API
-- Checkout handed off to Shopify (PCI / payments handled by Shopify)
-- Admin sync + webhook HMAC verification into Neon Postgres
-- Dual mode: local CRUD inventory **and** headless Shopify commerce
+- BFF pattern: React never talks to Shopify directly, Express proxies Storefront GraphQL
+- Cart persisted via a `localStorage` cart id plus the Shopify Cart API
+- Checkout is handed off to Shopify, so payments and PCI scope stay on their side
+- Admin sync and webhook HMAC verification both write into Neon Postgres
+- Dual mode: local CRUD inventory alongside headless Shopify commerce
 
-## Smoke-test checklist
+## Verifying the setup
 
-- [ ] `GET http://localhost:3000/api/shopify/status` shows `storefrontConfigured: true`
-- [ ] `/shop` lists products from your store
-- [ ] Add to cart opens drawer with correct totals
-- [ ] Checkout opens Shopify checkout URL
-- [ ] (Optional) Sync writes rows into `shopify_products`
-- [ ] (Optional) Edit a product in Shopify Admin → webhook updates cache
+- `GET http://localhost:3000/api/shopify/status` shows `storefrontConfigured: true`
+- `/shop` lists products from the store
+- Add to cart opens the drawer with correct totals
+- Checkout opens the Shopify checkout URL
+- Sync writes rows into `shopify_products`
+- Editing a product in Shopify Admin fires a webhook that updates the cache
