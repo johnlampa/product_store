@@ -100,19 +100,19 @@ On `/shop`, if the Admin API is configured, **Sync to DB** calls `POST /api/shop
 
 ---
 
-## Design notes
+## How it fits together
 
-- BFF pattern: React never talks to Shopify directly, Express proxies Storefront GraphQL
-- Cart persisted via a `localStorage` cart id plus the Shopify Cart API
-- Checkout is handed off to Shopify, so payments and PCI scope stay on their side
-- Admin sync and webhook HMAC verification both write into Neon Postgres
-- Dual mode: local CRUD inventory alongside headless Shopify commerce
+- React talks to Express only; Express proxies Shopify Storefront GraphQL
+- Cart id is kept in `localStorage` and synced through the Cart API
+- Checkout redirects to Shopify-hosted checkout
+- Admin sync and webhook HMAC verification write into Neon Postgres
+- Local CRUD inventory and the Shopify shop run side by side
 
-## Verifying the setup
+## Quick checks
 
-- `GET http://localhost:3000/api/shopify/status` shows `storefrontConfigured: true`
+- `GET http://localhost:3000/api/shopify/status` should show `storefrontConfigured: true`
 - `/shop` lists products from the store
-- Add to cart opens the drawer with correct totals
+- Add to cart opens the drawer with the right totals
 - Checkout opens the Shopify checkout URL
 - Sync writes rows into `shopify_products`
-- Editing a product in Shopify Admin fires a webhook that updates the cache
+- Editing a product in Shopify Admin should update the cache via webhook
