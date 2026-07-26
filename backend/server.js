@@ -32,7 +32,7 @@ app.use(
 );
 app.use(morgan('dev'));
 
-// Shopify webhooks need the raw body for HMAC verification, so mount before the JSON parser
+// raw body needed for webhook hmac check, so mount this before express.json
 app.post(
   '/api/shopify/webhooks',
   express.raw({ type: 'application/json' }),
@@ -46,7 +46,7 @@ app.post(
 app.use(express.json());
 
 app.use(async (req, res, next) => {
-  // Only protect API routes; static frontend assets should pass through
+  // only guard the api routes, let static files through
   if (
     !req.path.startsWith('/api') ||
     req.path.startsWith('/api/shopify/webhooks') ||
@@ -90,7 +90,7 @@ app.use(async (req, res, next) => {
 app.use('/api/products', productRoutes);
 app.use('/api/shopify', shopifyRoutes);
 
-// Serve the Vite build whenever it exists (Render may not set NODE_ENV=production)
+// serve the frontend build if it exists (render doesn't always set NODE_ENV)
 if (fs.existsSync(frontendIndex)) {
   app.use(express.static(frontendDist));
 
