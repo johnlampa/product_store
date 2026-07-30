@@ -1,10 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="autumn">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>JKL Shop</title>
+    <script>
+      // Applied before first paint so the saved theme never flashes the default.
+      try {
+        document.documentElement.dataset.theme =
+          localStorage.getItem('preferred-theme') || 'autumn';
+      } catch (err) {
+        /* localStorage unavailable (private mode); keep the default theme */
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

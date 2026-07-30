@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    /* Stop iOS Safari from inflating text in landscape */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-base-200 text-base-content;
+    /* Rubber-band overscroll on mobile reveals the body, so it must be themed too */
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+  }
+}
+
+@layer utilities {
+  /* The viewport is viewport-fit=cover, so edge-anchored UI has to inset itself */
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

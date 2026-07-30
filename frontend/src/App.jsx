@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import ShopPage from './pages/ShopPage';
@@ -9,11 +10,12 @@ import { Toaster } from 'react-hot-toast';
 function App() {
   const { theme } = useThemeStore();
 
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
   return (
-    <div
-      className="min-h-screen bg-base-200 transition-colors duration-300"
-      data-theme={theme}
-    >
+    <div className="min-h-screen bg-base-200 transition-colors duration-300 pb-safe">
       <NavBar />
       <Routes>
         <Route path="/" element={<ShopPage />} />
@@ -22,7 +24,11 @@ function App() {
       </Routes>
 
       <CartDrawer />
-      <Toaster />
+      <Toaster
+        position="bottom-center"
+        containerStyle={{ bottom: 'calc(1rem + env(safe-area-inset-bottom))' }}
+        toastOptions={{ className: 'max-w-[90vw]' }}
+      />
     </div>
   );
 }
