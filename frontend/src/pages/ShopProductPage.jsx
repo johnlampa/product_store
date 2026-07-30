@@ -128,7 +128,7 @@ function ShopProductPage() {
           )}
 
           <button
-            className="btn btn-primary btn-lg w-full sm:w-auto"
+            className="btn btn-primary w-auto min-w-36"
             disabled={!selectedVariant?.availableForSale || cartLoading}
             onClick={() => addToCart(selectedVariant.id)}
           >
