@@ -3,6 +3,7 @@
 A full-stack e-commerce demo built with the **PERN** stack (PostgreSQL, Express, React, Node), plus a **headless Shopify** storefront for cart and checkout.
 
 **Live demo:** [https://product-store-3r9t.onrender.com](https://product-store-3r9t.onrender.com)
+Store password when testing checkout: **testpassword**
 
 ---
 
